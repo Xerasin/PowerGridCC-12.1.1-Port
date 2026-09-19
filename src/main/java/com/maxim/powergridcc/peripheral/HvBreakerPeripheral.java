@@ -1,4 +1,4 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.lua.LuaFunction;
@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import me.maxim.powergridcc.control.HvBreakerStateManager;
+import com.maxim.powergridcc.control.HvBreakerStateManager;
 import org.patryk3211.powergrid.electricity.electricswitch.HvBreakerBlockEntity;
 import org.patryk3211.powergrid.electricity.sim.SwitchedWire;
 
@@ -129,7 +129,7 @@ public class HvBreakerPeripheral extends AbstractPowerGridPeripheral<HvBreakerBl
             Method method = setting.getClass().getMethod("setValue", Integer.TYPE);
             method.invoke(setting, value);
             this.breaker.notifyUpdate();
-            this.breaker.m_6596_();
+            this.breaker.setChanged();
          } catch (ReflectiveOperationException e) {
             throw new IllegalStateException("Failed to change breaker setting", e);
          }
@@ -156,7 +156,7 @@ public class HvBreakerPeripheral extends AbstractPowerGridPeripheral<HvBreakerBl
       }
 
       this.breaker.notifyUpdate();
-      this.breaker.m_6596_();
+      this.breaker.setChanged();
    }
 
    @LuaFunction(
@@ -284,7 +284,7 @@ public class HvBreakerPeripheral extends AbstractPowerGridPeripheral<HvBreakerBl
       mainThread = true
    )
    public final Map<String, Object> getData() {
-      Map<String, Object> data = new HashMap();
+      Map<String, Object> data = new HashMap<>();
       data.put("closed", this.isClosed());
       data.put("open", this.isOpen());
       data.put("voltage", this.getVoltage());

@@ -1,4 +1,4 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import dan200.computercraft.api.lua.LuaFunction;
 import java.util.Set;

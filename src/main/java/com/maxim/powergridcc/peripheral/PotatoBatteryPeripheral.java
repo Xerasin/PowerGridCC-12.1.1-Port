@@ -1,4 +1,4 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import org.patryk3211.powergrid.electricity.battery.PotatoBatteryBlockEntity;
 

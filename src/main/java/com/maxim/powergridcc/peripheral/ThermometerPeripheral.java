@@ -1,4 +1,4 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import dan200.computercraft.api.lua.LuaFunction;
 import dan200.computercraft.api.peripheral.IPeripheral;
@@ -75,7 +75,7 @@ public class ThermometerPeripheral implements IPeripheral {
    )
    public final Map<String, Object> getData() {
       double temperature = this.readTemperature();
-      Map<String, Object> data = new HashMap();
+      Map<String, Object> data = new HashMap<>();
       data.put("temperature", temperature);
       data.put("maxTemperature", (double)this.thermometer.maxTemperature);
       data.put("progress", (double)this.thermometer.dialTarget);

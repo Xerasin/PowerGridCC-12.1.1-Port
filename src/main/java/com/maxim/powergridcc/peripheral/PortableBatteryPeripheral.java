@@ -1,4 +1,4 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import dan200.computercraft.api.lua.LuaFunction;
 import java.util.Map;
@@ -64,7 +64,7 @@ public class PortableBatteryPeripheral extends AbstractElectricPeripheral<Portab
       mainThread = true
    )
    public final String getName() {
-      Component name = ((PortableBatteryBlockEntity)this.target).m_5446_();
+      Component name = ((PortableBatteryBlockEntity)this.target).getDisplayName();
       return name == null ? "" : name.getString();
    }
 

@@ -1,4 +1,4 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import dan200.computercraft.api.lua.LuaFunction;
 import dan200.computercraft.api.peripheral.IPeripheral;
@@ -26,7 +26,7 @@ public class PlotterPeripheral implements IPeripheral {
    private float[] readRawBuffer() {
       try {
          float[] buffer = (float[])SAMPLE_BUFFER_FIELD.get(this.plotter);
-         return (float[])(([F)buffer).clone();
+         return buffer.clone();
       } catch (IllegalAccessException e) {
          throw new IllegalStateException("Failed to read plotter sample buffer", e);
       }
@@ -68,7 +68,7 @@ public class PlotterPeripheral implements IPeripheral {
    }
 
    private List<Double> toList(double[] samples) {
-      List<Double> result = new ArrayList(samples.length);
+      List<Double> result = new ArrayList<>(samples.length);
 
       for(double sample : samples) {
          result.add(sample);
@@ -219,7 +219,7 @@ public class PlotterPeripheral implements IPeripheral {
    )
    public final Map<String, Object> getData() {
       double[] samples = this.readOrderedSamples();
-      Map<String, Object> data = new HashMap();
+      Map<String, Object> data = new HashMap<>();
       data.put("current", samples.length == 0 ? (double)0.0F : samples[samples.length - 1]);
       data.put("minimum", this.getMinimum());
       data.put("maximum", this.getMaximum());

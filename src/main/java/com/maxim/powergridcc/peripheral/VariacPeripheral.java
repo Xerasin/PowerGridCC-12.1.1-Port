@@ -1,11 +1,11 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.lua.LuaFunction;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import me.maxim.powergridcc.control.TunedControlManager;
+import com.maxim.powergridcc.control.TunedControlManager;
 import org.patryk3211.powergrid.electricity.base.ThermalBehaviour;
 import org.patryk3211.powergrid.kinetics.base.TunedBlockEntity;
 import org.patryk3211.powergrid.kinetics.variac.VariacBlockEntity;
@@ -111,7 +111,7 @@ public class VariacPeripheral extends AbstractPowerGridPeripheral<VariacBlockEnt
       mainThread = true
    )
    public final Map<String, Object> getData() {
-      Map<String, Object> data = new HashMap();
+      Map<String, Object> data = new HashMap<>();
       data.put("type", this.getType());
       data.put("ratio", this.getRatio());
       data.put("current", this.getCurrent());

@@ -109,6 +109,7 @@ dependencies {
         exclude group: 'com.tterrag.registrate', module: 'Registrate'
     }
     implementation "cc.tweaked:cc-tweaked-${minecraft_version}-forge:${cc_tweaked_version}"
+    compileOnly files("libs/powergrid-mc${minecraft_version}-${powergrid_version}.jar")
 
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
@@ -148,8 +149,9 @@ tasks.withType(ProcessResources).configureEach {
             mod_name               : mod_name,
             mod_license            : mod_license,
             mod_version            : mod_version,
-                create_version         : create_version,
-                cc_tweaked_version     : cc_tweaked_version,
+            create_version         : create_version,
+            cc_tweaked_version     : cc_tweaked_version,
+            powergrid_version      : powergrid_version,
     ]
     inputs.properties replaceProperties
 

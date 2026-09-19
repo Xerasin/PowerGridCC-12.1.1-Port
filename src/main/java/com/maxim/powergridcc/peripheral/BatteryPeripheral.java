@@ -1,4 +1,4 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import dan200.computercraft.api.lua.LuaFunction;
 import dan200.computercraft.api.peripheral.IPeripheral;
@@ -71,7 +71,7 @@ public class BatteryPeripheral implements IPeripheral {
       mainThread = true
    )
    public final Map<String, Object> getData() {
-      Map<String, Object> data = new HashMap();
+      Map<String, Object> data = new HashMap<>();
       double energy = this.battery.getEnergy();
       double capacity = this.battery.getCapacity();
       double level = capacity > (double)0.0F ? energy / capacity : (double)0.0F;

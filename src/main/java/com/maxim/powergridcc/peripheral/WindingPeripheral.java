@@ -1,4 +1,4 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import dan200.computercraft.api.lua.LuaFunction;
 import java.util.HashMap;
@@ -84,7 +84,7 @@ public class WindingPeripheral extends AbstractElectricPeripheral<WindingBlockEn
          Object value = ReflectionHelper.getField(object, fieldName);
          int var10000;
          if (value instanceof Set) {
-            Set<?> set = (Set)value;
+            Set<?> set = (Set<?>)value;
             var10000 = set.size();
          } else {
             var10000 = 0;
@@ -231,11 +231,11 @@ public class WindingPeripheral extends AbstractElectricPeripheral<WindingBlockEn
    )
    public final Map<String, Object> getMainPosition() {
       WindingBlockEntity main = this.getMainWinding();
-      BlockPos position = main.m_58899_();
-      Map<String, Object> result = new HashMap();
-      result.put("x", position.m_123341_());
-      result.put("y", position.m_123342_());
-      result.put("z", position.m_123343_());
+      BlockPos position = main.getBlockPos();
+      Map<String, Object> result = new HashMap<>();
+      result.put("x", position.getX());
+      result.put("y", position.getY());
+      result.put("z", position.getZ());
       return result;
    }
 

@@ -1,4 +1,4 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import dan200.computercraft.api.lua.LuaFunction;
 import java.util.ArrayList;
@@ -92,7 +92,7 @@ public class CRTPeripheral extends AbstractElectricPeripheral<CRTBlockEntity> {
    }
 
    private List<Double> toLuaList(float[] values) {
-      List<Double> result = new ArrayList(values.length);
+      List<Double> result = new ArrayList<>(values.length);
 
       for(float value : values) {
          result.add((double)value);
@@ -102,7 +102,7 @@ public class CRTPeripheral extends AbstractElectricPeripheral<CRTBlockEntity> {
    }
 
    private Map<String, Object> createWireData(ElectricWire wire) {
-      Map<String, Object> data = new HashMap();
+      Map<String, Object> data = new HashMap<>();
       if (wire == null) {
          data.put("voltage", (double)0.0F);
          data.put("current", (double)0.0F);
@@ -122,7 +122,7 @@ public class CRTPeripheral extends AbstractElectricPeripheral<CRTBlockEntity> {
       mainThread = true
    )
    public final int getSampleCount() {
-      return CRTBlockEntity.sampleCount();
+      return this.target.sampleCount();
    }
 
    @LuaFunction(
@@ -269,7 +269,7 @@ public class CRTPeripheral extends AbstractElectricPeripheral<CRTBlockEntity> {
       mainThread = true
    )
    public final Map<String, Object> getTrace() {
-      Map<String, Object> trace = new HashMap();
+      Map<String, Object> trace = new HashMap<>();
       trace.put("x", this.getXPoints());
       trace.put("y", this.getYPoints());
       trace.put("brightness", this.getBrightness());

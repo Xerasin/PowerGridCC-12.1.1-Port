@@ -1,4 +1,4 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import dan200.computercraft.api.lua.LuaFunction;
 import java.util.HashMap;
@@ -91,7 +91,7 @@ public class CarbonPilePeripheral extends AbstractPowerGridPeripheral<CarbonPile
       mainThread = true
    )
    public final Map<String, Object> getData() {
-      Map<String, Object> data = new HashMap();
+      Map<String, Object> data = new HashMap<>();
       data.put("type", this.getType());
       data.put("temperature", this.getTemperature());
       data.put("overheated", this.isOverheated());

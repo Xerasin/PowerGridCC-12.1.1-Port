@@ -1,4 +1,4 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import dan200.computercraft.api.lua.LuaFunction;
 import java.util.HashMap;
@@ -37,7 +37,7 @@ public abstract class AbstractElectricPeripheral<T extends ElectricBlockEntity> 
    }
 
    protected Map<String, Object> createBaseData() {
-      Map<String, Object> data = new HashMap();
+      Map<String, Object> data = new HashMap<String, Object>();
       data.put("type", this.getType());
       data.put("temperature", this.getTemperature());
       data.put("overheated", this.isOverheated());

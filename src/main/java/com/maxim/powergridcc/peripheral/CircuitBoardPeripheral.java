@@ -1,4 +1,4 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import dan200.computercraft.api.lua.LuaFunction;
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class CircuitBoardPeripheral extends AbstractElectricPeripheral<CircuitBo
    }
 
    private Map<String, Object> createComponentData(PlacedComponent placed, int index) {
-      Map<String, Object> data = new HashMap();
+      Map<String, Object> data = new HashMap<>();
       Component component = placed.component;
       data.put("index", index);
       data.put("x", placed.x);
@@ -111,7 +111,7 @@ public class CircuitBoardPeripheral extends AbstractElectricPeripheral<CircuitBo
    )
    public final void setSchematicName(String name) {
       ((CircuitBoardBlockEntity)this.target).setSchematicName(name == null ? "" : name);
-      ((CircuitBoardBlockEntity)this.target).m_6596_();
+      ((CircuitBoardBlockEntity)this.target).setChanged();
    }
 
    @LuaFunction(
@@ -155,7 +155,7 @@ public class CircuitBoardPeripheral extends AbstractElectricPeripheral<CircuitBo
       mainThread = true
    )
    public final List<Map<String, Object>> getComponents() {
-      List<Map<String, Object>> result = new ArrayList();
+      List<Map<String, Object>> result = new ArrayList<>();
       CircuitSchematic schematic = this.getSchematicInternal();
       if (schematic == null) {
          return result;

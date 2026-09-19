@@ -1,4 +1,4 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.lua.LuaFunction;
@@ -30,6 +30,7 @@ public class ConstantSpeedMotorPeripheral extends AbstractPowerGridPeripheral<Co
       for(Class<?> current = type; current != null; current = current.getSuperclass()) {
          try {
             return current.getDeclaredField(name);
+         } catch (NoSuchFieldException ignored) {
          }
       }
 
@@ -89,7 +90,7 @@ public class ConstantSpeedMotorPeripheral extends AbstractPowerGridPeripheral<Co
       } else {
          behaviour.setValue(speed);
          this.motor.updateGeneratedRotation();
-         this.motor.m_6596_();
+         this.motor.setChanged();
          this.motor.notifyUpdate();
       }
    }
@@ -235,7 +236,7 @@ public class ConstantSpeedMotorPeripheral extends AbstractPowerGridPeripheral<Co
       mainThread = true
    )
    public final Map<String, Object> getData() {
-      Map<String, Object> data = new HashMap();
+      Map<String, Object> data = new HashMap<>();
       data.put("voltage", this.getVoltage());
       data.put("current", this.getCurrent());
       data.put("power", this.getPower());

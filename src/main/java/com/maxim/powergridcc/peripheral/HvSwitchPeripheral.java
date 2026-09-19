@@ -1,11 +1,11 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import dan200.computercraft.api.lua.LuaFunction;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import me.maxim.powergridcc.control.HvSwitchControlManager;
+import com.maxim.powergridcc.control.HvSwitchControlManager;
 import net.createmod.catnip.animation.LerpedFloat;
 import org.patryk3211.powergrid.electricity.electricswitch.HvSwitchBlockEntity;
 import org.patryk3211.powergrid.electricity.sim.SwitchedWire;
@@ -181,7 +181,7 @@ public class HvSwitchPeripheral extends AbstractPowerGridPeripheral<HvSwitchBloc
       mainThread = true
    )
    public final Map<String, Object> getData() {
-      Map<String, Object> data = new HashMap();
+      Map<String, Object> data = new HashMap<>();
       data.put("closed", this.isClosed());
       data.put("open", this.isOpen());
       data.put("computerControlled", this.isComputerControlled());

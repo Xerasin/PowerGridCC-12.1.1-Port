@@ -1,21 +1,20 @@
-package me.maxim.powergridcc.control;
+package com.maxim.powergridcc.control;
 
 import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.TickEvent.Phase;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+
 import org.patryk3211.powergrid.kinetics.servo.ServoBlockEntity;
 
 @EventBusSubscriber(
-   modid = "powergridcc",
-   bus = Bus.FORGE
+   modid = "powergridcc"
 )
 public final class ServoControlManager {
-   private static final Map<ServoBlockEntity, ControlState> CONTROLLED_SERVOS = new ConcurrentHashMap();
+   private static final Map<ServoBlockEntity, ControlState> CONTROLLED_SERVOS = new ConcurrentHashMap<ServoBlockEntity, ControlState>();
    private static Field currentTargetField;
    private static Field avgTargetField;
 
@@ -51,12 +50,13 @@ public final class ServoControlManager {
    }
 
    @SubscribeEvent
-   public static void onServerTick(TickEvent.ServerTickEvent event) {
-      if (event.phase == Phase.END) {
+   public static void onServerTick(ServerTickEvent.Post event) {
+      {
          CONTROLLED_SERVOS.entrySet().removeIf((entry) -> {
             ServoBlockEntity servo = (ServoBlockEntity)entry.getKey();
-            if (servo != null && !servo.m_58901_()) {
-               if (servo.m_58904_() != null && !servo.m_58904_().f_46443_) {
+            if (servo != null && !servo.isRemoved()) {
+               Level level = servo.getLevel();
+               if (level != null && !level.isClientSide) {
                   applyTargetImmediately(servo, ((ControlState)entry.getValue()).targetAngle());
                   return false;
                } else {

@@ -1,4 +1,4 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.lua.LuaFunction;
@@ -47,7 +47,7 @@ public class ResistorPeripheral extends AbstractElectricPeripheral<ResistorBlock
          behaviour.value = value;
          ElectricWire wire = this.getWire();
          wire.setResistance((double)behaviour.getResistance());
-         ((ResistorBlockEntity)this.target).m_6596_();
+         ((ResistorBlockEntity)this.target).setChanged();
          ((ResistorBlockEntity)this.target).notifyUpdate();
       } else {
          throw new LuaException("Value must be between 0 and 72");

@@ -1,4 +1,4 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import dan200.computercraft.api.lua.LuaFunction;
 import java.util.Map;
@@ -43,7 +43,7 @@ public class ElectricFanPeripheral extends AbstractElectricPeripheral<ElectricFa
    )
    public final String getAirFlowDirection() {
       Direction direction = ((ElectricFanBlockEntity)this.target).getAirFlowDirection();
-      return direction == null ? "unknown" : direction.m_122433_();
+      return direction == null ? "unknown" : direction.getName();
    }
 
    @LuaFunction(
@@ -51,7 +51,7 @@ public class ElectricFanPeripheral extends AbstractElectricPeripheral<ElectricFa
    )
    public final String getAirflowOriginSide() {
       Direction direction = ((ElectricFanBlockEntity)this.target).getAirflowOriginSide();
-      return direction == null ? "unknown" : direction.m_122433_();
+      return direction == null ? "unknown" : direction.getName();
    }
 
    @LuaFunction(

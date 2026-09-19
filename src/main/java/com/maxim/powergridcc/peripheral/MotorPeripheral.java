@@ -1,4 +1,4 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import dan200.computercraft.api.lua.LuaFunction;
 import java.lang.reflect.Field;
@@ -133,7 +133,7 @@ public class MotorPeripheral extends AbstractPowerGridPeripheral<ElectricMotorBl
       double power = this.getPower();
       double speed = this.getGeneratedSpeed();
       double torque = this.getTorque();
-      Map<String, Object> data = new HashMap();
+      Map<String, Object> data = new HashMap<>();
       data.put("voltage", voltage);
       data.put("current", current);
       data.put("power", power);

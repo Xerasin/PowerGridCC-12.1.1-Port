@@ -1,22 +1,21 @@
-package me.maxim.powergridcc.control;
+package com.maxim.powergridcc.control;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.TickEvent.Phase;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
+import net.minecraft.world.level.Level;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+
 import org.patryk3211.powergrid.electricity.contactor.ContactorBlockEntity;
 
 @EventBusSubscriber(
-   modid = "powergridcc",
-   bus = Bus.FORGE
+   modid = "powergridcc"
 )
 public final class ContactorControlManager {
-   private static final Map<ContactorBlockEntity, Boolean> CONTROLLED = new ConcurrentHashMap();
+   private static final Map<ContactorBlockEntity, Boolean> CONTROLLED = new ConcurrentHashMap<ContactorBlockEntity, Boolean>();
    private static Field stateField;
    private static Method setStateMethod;
 
@@ -56,12 +55,13 @@ public final class ContactorControlManager {
    }
 
    @SubscribeEvent
-   public static void onServerTick(TickEvent.ServerTickEvent event) {
-      if (event.phase == Phase.END) {
+   public static void onServerTick(ServerTickEvent.Post event) {
+      {
          CONTROLLED.entrySet().removeIf((entry) -> {
             ContactorBlockEntity contactor = (ContactorBlockEntity)entry.getKey();
-            if (contactor != null && !contactor.m_58901_()) {
-               if (contactor.m_58904_() != null && !contactor.m_58904_().f_46443_) {
+            if (contactor != null && !contactor.isRemoved()) {
+               Level level = contactor.getLevel();
+               if (level != null && !level.isClientSide) {
                   applyState(contactor, (Boolean)entry.getValue());
                   return false;
                } else {
@@ -78,7 +78,7 @@ public final class ContactorControlManager {
       try {
          initializeReflection();
          setStateMethod.invoke(contactor, closed);
-         contactor.m_6596_();
+         contactor.setChanged();
       } catch (ReflectiveOperationException e) {
          throw new IllegalStateException("Failed to control contactor", e);
       }

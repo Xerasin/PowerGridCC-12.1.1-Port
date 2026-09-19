@@ -1,4 +1,4 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import dan200.computercraft.api.lua.LuaFunction;
 import java.lang.reflect.Field;
@@ -9,6 +9,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+
 import org.patryk3211.powergrid.electricity.electricswitch.SwitchBlock;
 import org.patryk3211.powergrid.electricity.electricswitch.SwitchBlockEntity;
 import org.patryk3211.powergrid.electricity.sim.SwitchedWire;
@@ -65,21 +67,36 @@ public class ElectricSwitchPeripheral extends AbstractPowerGridPeripheral<Switch
    }
 
    private void setClosedState(boolean closed) {
-      Level level = this.electricSwitch.m_58904_();
+      Level level = this.electricSwitch.getLevel();
       if (level == null) {
          this.electricSwitch.setState(closed);
       } else {
-         BlockPos pos = this.electricSwitch.m_58899_();
-         BlockState state = level.m_8055_(pos);
-         Block var6 = state.m_60734_();
+         BlockPos pos = this.electricSwitch.getBlockPos();
+         if (pos == null) {
+            this.electricSwitch.setState(closed);
+            return;
+         }
+         BlockState state = level.getBlockState(pos);
+         Block var6 = state.getBlock();
          if (var6 instanceof SwitchBlock) {
             SwitchBlock switchBlock = (SwitchBlock)var6;
             boolean open = !closed;
-            boolean currentOpen = (Boolean)state.m_61143_(SwitchBlock.OPEN);
-            if (currentOpen != open) {
-               level.m_46597_(pos, (BlockState)state.m_61124_(SwitchBlock.OPEN, open));
-               this.electricSwitch.setState(closed);
-               switchBlock.useSound(level, pos, open);
+            final BooleanProperty open2 = SwitchBlock.OPEN;
+            if (open2 != null) {
+               boolean currentOpen = (Boolean)state.getValue(open2);
+               if (currentOpen != open) {
+                  if (state != null) {
+                     BlockState newState = state.setValue(open2, open);
+                     if (newState != null) {
+                        level.setBlock(pos, newState, 3);
+                        switchBlock.useSound(level, pos, open);
+                     }
+                  }
+                  
+                  this.electricSwitch.setState(closed);
+               } else {
+                  this.electricSwitch.setState(closed);
+               }
             } else {
                this.electricSwitch.setState(closed);
             }
@@ -91,22 +108,34 @@ public class ElectricSwitchPeripheral extends AbstractPowerGridPeripheral<Switch
    }
 
    private void pressButton() {
-      Level level = this.electricSwitch.m_58904_();
+      Level level = this.electricSwitch.getLevel();
       if (level == null) {
          this.electricSwitch.setState(true);
       } else {
-         BlockPos pos = this.electricSwitch.m_58899_();
-         BlockState state = level.m_8055_(pos);
-         Block var5 = state.m_60734_();
+         BlockPos pos = this.electricSwitch.getBlockPos();
+         if (pos == null) {
+            this.electricSwitch.setState(true);
+            return;
+         }
+         BlockState state = level.getBlockState(pos);
+         Block var5 = state.getBlock();
          if (var5 instanceof SwitchBlock) {
             SwitchBlock switchBlock = (SwitchBlock)var5;
-            boolean currentlyOpen = (Boolean)state.m_61143_(SwitchBlock.OPEN);
-            if (currentlyOpen) {
-               level.m_46597_(pos, (BlockState)state.m_61124_(SwitchBlock.OPEN, false));
-               switchBlock.useSound(level, pos, false);
-            }
+            final BooleanProperty open2 = SwitchBlock.OPEN;
+            if (open2 != null) {
+               boolean currentlyOpen = (Boolean)state.getValue(open2);
+               if (currentlyOpen) {
+                  BlockState newState = state.setValue(open2, false);
+                  if (newState != null) {
+                     level.setBlock(pos, newState, 3);
+                     switchBlock.useSound(level, pos, false);
+                  }
+               }
 
-            this.electricSwitch.setState(true);
+               this.electricSwitch.setState(true);
+            } else {
+               this.electricSwitch.setState(true);
+            }
          } else {
             this.electricSwitch.setState(true);
          }
@@ -218,7 +247,7 @@ public class ElectricSwitchPeripheral extends AbstractPowerGridPeripheral<Switch
       mainThread = true
    )
    public final Map<String, Object> getData() {
-      Map<String, Object> data = new HashMap();
+      Map<String, Object> data = new HashMap<>();
       data.put("closed", this.isClosed());
       data.put("open", this.isOpen());
       data.put("button", this.isButton());

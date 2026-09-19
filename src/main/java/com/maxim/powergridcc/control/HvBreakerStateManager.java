@@ -1,23 +1,22 @@
-package me.maxim.powergridcc.control;
+package com.maxim.powergridcc.control;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.TickEvent.Phase;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
+import net.minecraft.world.level.Level;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+
 import org.patryk3211.powergrid.electricity.electricswitch.HvBreakerBlockEntity;
 import org.patryk3211.powergrid.electricity.sim.SwitchedWire;
 
 @EventBusSubscriber(
-   modid = "powergridcc",
-   bus = Bus.FORGE
+   modid = "powergridcc"
 )
 public final class HvBreakerStateManager {
-   private static final Map<HvBreakerBlockEntity, BreakerState> STATES = new ConcurrentHashMap();
+   private static final Map<HvBreakerBlockEntity, BreakerState> STATES = new ConcurrentHashMap<HvBreakerBlockEntity, BreakerState>();
    private static Field stateField;
    private static Field wireField;
    private static Field settingField;
@@ -63,13 +62,14 @@ public final class HvBreakerStateManager {
    }
 
    @SubscribeEvent
-   public static void onServerTick(TickEvent.ServerTickEvent event) {
-      if (event.phase == Phase.END) {
+   public static void onServerTick(ServerTickEvent.Post event) {
+      {
          STATES.entrySet().removeIf((entry) -> {
             HvBreakerBlockEntity breaker = (HvBreakerBlockEntity)entry.getKey();
             BreakerState tracked = (BreakerState)entry.getValue();
-            if (breaker != null && !breaker.m_58901_()) {
-               if (breaker.m_58904_() != null && !breaker.m_58904_().f_46443_) {
+            if (breaker != null && !breaker.isRemoved()) {
+               Level level = breaker.getLevel();
+               if (level != null && !level.isClientSide) {
                   boolean currentlyClosed = readClosed(breaker);
                   if (tracked.lastClosed && !currentlyClosed) {
                      if (tracked.manualOperation) {

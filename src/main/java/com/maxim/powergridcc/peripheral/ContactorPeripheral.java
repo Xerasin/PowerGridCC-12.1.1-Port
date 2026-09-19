@@ -1,11 +1,11 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import dan200.computercraft.api.lua.LuaFunction;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import me.maxim.powergridcc.control.ContactorControlManager;
+import com.maxim.powergridcc.control.ContactorControlManager;
 import org.patryk3211.powergrid.electricity.contactor.ContactorBlockEntity;
 import org.patryk3211.powergrid.electricity.sim.ElectricWire;
 import org.patryk3211.powergrid.electricity.sim.SwitchedWire;
@@ -208,7 +208,7 @@ public class ContactorPeripheral extends AbstractPowerGridPeripheral<ContactorBl
       mainThread = true
    )
    public final Map<String, Object> getData() {
-      Map<String, Object> data = new HashMap();
+      Map<String, Object> data = new HashMap<>();
       data.put("closed", this.isClosed());
       data.put("open", this.isOpen());
       data.put("computerControlled", this.isComputerControlled());

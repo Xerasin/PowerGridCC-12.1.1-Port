@@ -1,9 +1,11 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import dan200.computercraft.api.lua.LuaFunction;
 import java.util.Map;
 import java.util.Set;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.item.Item;
+
 import org.patryk3211.powergrid.electricity.light.bulb.LightBulbState;
 import org.patryk3211.powergrid.electricity.light.fixture.LightFixtureBlockEntity;
 import org.patryk3211.powergrid.electricity.sim.SwitchedWire;
@@ -41,7 +43,8 @@ public class LightFixturePeripheral extends AbstractElectricPeripheral<LightFixt
    )
    public final String getBulbItem() {
       LightBulbState bulb = this.getBulb();
-      return bulb == null ? "" : BuiltInRegistries.f_257033_.m_7981_(bulb.getItem()).toString();
+      Item item = bulb == null ? null : bulb.getItem();
+      return item == null ? "" : BuiltInRegistries.ITEM.getKey(item).toString();
    }
 
    @LuaFunction(
@@ -49,7 +52,7 @@ public class LightFixturePeripheral extends AbstractElectricPeripheral<LightFixt
    )
    public final String getColor() {
       LightBulbState bulb = this.getBulb();
-      return bulb != null && bulb.getColor() != null ? bulb.getColor().m_41065_() : "";
+      return bulb != null && bulb.getColor() != null ? bulb.getColor().getSerializedName() : "";
    }
 
    @LuaFunction(

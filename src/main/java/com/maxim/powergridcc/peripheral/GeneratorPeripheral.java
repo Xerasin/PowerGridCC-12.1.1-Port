@@ -1,4 +1,4 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import dan200.computercraft.api.lua.LuaFunction;
 import java.lang.reflect.Field;
@@ -166,7 +166,7 @@ public class GeneratorPeripheral extends AbstractPowerGridPeripheral<CommutatorB
       double power = (double)this.commutator.getPower();
       double angularVelocity = this.getAngularVelocity();
       double rpm = angularVelocity * (double)60.0F / (Math.PI * 2D);
-      Map<String, Object> data = new HashMap();
+      Map<String, Object> data = new HashMap<>();
       data.put("assembled", source != null);
       data.put("voltage", voltage);
       data.put("emf", emf);

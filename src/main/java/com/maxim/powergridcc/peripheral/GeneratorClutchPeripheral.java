@@ -1,4 +1,4 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollOptionBehaviour;
 import dan200.computercraft.api.lua.LuaFunction;
@@ -22,7 +22,7 @@ public class GeneratorClutchPeripheral extends AbstractPowerGridPeripheral<Gener
 
    private ScrollOptionBehaviour<?> getModeBehaviour() {
       Object value = ReflectionHelper.getField(this.target, "mode");
-      ScrollOptionBehaviour var10000;
+      ScrollOptionBehaviour<?> var10000;
       if (value instanceof ScrollOptionBehaviour<?> behaviour) {
          var10000 = behaviour;
       } else {
@@ -152,7 +152,7 @@ public class GeneratorClutchPeripheral extends AbstractPowerGridPeripheral<Gener
       mainThread = true
    )
    public final Map<String, Object> getData() {
-      Map<String, Object> data = new HashMap();
+      Map<String, Object> data = new HashMap<>();
       data.put("type", this.getType());
       data.put("mode", this.getMode());
       data.put("generatorMode", this.isGeneratorMode());

@@ -1,4 +1,4 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.lua.LuaFunction;
@@ -6,7 +6,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import me.maxim.powergridcc.control.ServoControlManager;
+import com.maxim.powergridcc.control.ServoControlManager;
 import org.patryk3211.powergrid.electricity.sim.ElectricWire;
 import org.patryk3211.powergrid.kinetics.servo.ServoBlockEntity;
 
@@ -190,7 +190,7 @@ public class ServoPeripheral extends AbstractPowerGridPeripheral<ServoBlockEntit
       mainThread = true
    )
    public final Map<String, Object> getData() {
-      Map<String, Object> data = new HashMap();
+      Map<String, Object> data = new HashMap<>();
       data.put("angle", this.getAngle());
       data.put("targetAngle", this.getTargetAngle());
       data.put("generatedSpeed", this.getGeneratedSpeed());

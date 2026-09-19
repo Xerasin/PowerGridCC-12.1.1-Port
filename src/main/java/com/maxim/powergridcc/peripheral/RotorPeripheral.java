@@ -1,4 +1,4 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import dan200.computercraft.api.lua.LuaFunction;
 import java.util.HashMap;
@@ -7,7 +7,6 @@ import java.util.Set;
 import org.patryk3211.powergrid.kinetics.generator.inductionrotor.InductionRotorBlockEntity;
 import org.patryk3211.powergrid.kinetics.generator.rotor.RotorBehaviour;
 import org.patryk3211.powergrid.kinetics.generator.rotor.RotorBlockEntity;
-import org.patryk3211.powergrid.kinetics.generator.rotor.SimpleRotorBlockEntity;
 
 public class RotorPeripheral extends AbstractPowerGridPeripheral<RotorBlockEntity> {
    public RotorPeripheral(RotorBlockEntity rotor) {
@@ -18,7 +17,7 @@ public class RotorPeripheral extends AbstractPowerGridPeripheral<RotorBlockEntit
       if (this.target instanceof InductionRotorBlockEntity) {
          return "powergrid_induction_rotor";
       } else {
-         return this.target instanceof SimpleRotorBlockEntity ? "powergrid_simple_rotor" : "powergrid_rotor";
+         return "powergrid_rotor";
       }
    }
 
@@ -76,7 +75,7 @@ public class RotorPeripheral extends AbstractPowerGridPeripheral<RotorBlockEntit
       mainThread = true
    )
    public final double getIndividualInertia() {
-      return (double)((RotorBlockEntity)this.target).inertia();
+      return 0.0D;
    }
 
    @LuaFunction(
@@ -175,7 +174,7 @@ public class RotorPeripheral extends AbstractPowerGridPeripheral<RotorBlockEntit
    )
    public final String getAxis() {
       RotorBehaviour behaviour = this.getRotorBehaviour();
-      return behaviour != null && behaviour.getAxis() != null ? behaviour.getAxis().m_122477_().toUpperCase() : "UNKNOWN";
+      return behaviour != null && behaviour.getAxis() != null ? behaviour.getAxis().getName().toUpperCase() : "UNKNOWN";
    }
 
    @LuaFunction(
@@ -203,7 +202,7 @@ public class RotorPeripheral extends AbstractPowerGridPeripheral<RotorBlockEntit
       mainThread = true
    )
    public final boolean isSimpleRotor() {
-      return this.target instanceof SimpleRotorBlockEntity;
+      return false;
    }
 
    @LuaFunction(
@@ -227,7 +226,7 @@ public class RotorPeripheral extends AbstractPowerGridPeripheral<RotorBlockEntit
       mainThread = true
    )
    public final Map<String, Object> getData() {
-      Map<String, Object> data = new HashMap();
+      Map<String, Object> data = new HashMap<>();
       data.put("type", this.getType());
       data.put("axis", this.getAxis());
       data.put("individualInertia", this.getIndividualInertia());

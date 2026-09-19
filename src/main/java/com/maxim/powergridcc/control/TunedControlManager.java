@@ -1,22 +1,21 @@
-package me.maxim.powergridcc.control;
+package com.maxim.powergridcc.control;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.TickEvent.Phase;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
+import net.minecraft.world.level.Level;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+
 import org.patryk3211.powergrid.kinetics.base.TunedBlockEntity;
 import org.patryk3211.powergrid.kinetics.rheostat.RheostatBlockEntity;
 import org.patryk3211.powergrid.kinetics.variac.VariacBlockEntity;
 
 @EventBusSubscriber(
-   modid = "powergridcc",
-   bus = Bus.FORGE
+   modid = "powergridcc"
 )
 public final class TunedControlManager {
-   private static final Map<TunedBlockEntity, ControlState> CONTROLLED_BLOCKS = new ConcurrentHashMap();
+   private static final Map<TunedBlockEntity, ControlState> CONTROLLED_BLOCKS = new ConcurrentHashMap<>();
 
    private TunedControlManager() {
    }
@@ -51,12 +50,13 @@ public final class TunedControlManager {
    }
 
    @SubscribeEvent
-   public static void onServerTick(TickEvent.ServerTickEvent event) {
-      if (event.phase == Phase.END) {
+   public static void onServerTick(ServerTickEvent.Post event) {
+      {
          CONTROLLED_BLOCKS.entrySet().removeIf((entry) -> {
             TunedBlockEntity blockEntity = (TunedBlockEntity)entry.getKey();
-            if (blockEntity != null && !blockEntity.m_58901_()) {
-               if (blockEntity.m_58904_() != null && !blockEntity.m_58904_().f_46443_) {
+            if (blockEntity != null && !blockEntity.isRemoved()) {
+               Level level = blockEntity.getLevel();
+               if (level != null && !level.isClientSide) {
                   applyRatioImmediately(blockEntity, ((ControlState)entry.getValue()).ratio());
                   return false;
                } else {
@@ -75,7 +75,7 @@ public final class TunedControlManager {
       blockEntity.arm.updateChaseTarget((float)armValue);
       blockEntity.arm.forceNextSync();
       blockEntity.refreshParameters();
-      blockEntity.m_6596_();
+      blockEntity.setChanged();
       blockEntity.notifyUpdate();
    }
 

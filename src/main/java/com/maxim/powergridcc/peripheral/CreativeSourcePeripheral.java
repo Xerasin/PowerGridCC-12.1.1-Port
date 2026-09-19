@@ -1,4 +1,4 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.lua.LuaFunction;
@@ -26,6 +26,7 @@ public class CreativeSourcePeripheral extends AbstractElectricPeripheral<Creativ
       for(Class<?> current = type; current != null; current = current.getSuperclass()) {
          try {
             return current.getDeclaredField(name);
+         } catch (NoSuchFieldException ignored) {
          }
       }
 
@@ -47,7 +48,7 @@ public class CreativeSourcePeripheral extends AbstractElectricPeripheral<Creativ
          Field field = findField(((CreativeSourceBlockEntity)this.target).getClass(), "overwrite");
          field.setAccessible(true);
          field.setBoolean(this.target, enabled);
-         ((CreativeSourceBlockEntity)this.target).m_6596_();
+         ((CreativeSourceBlockEntity)this.target).setChanged();
          ((CreativeSourceBlockEntity)this.target).notifyUpdate();
       } catch (ReflectiveOperationException exception) {
          throw new IllegalStateException("Failed to change creative source overwrite mode", exception);
@@ -126,7 +127,7 @@ public class CreativeSourcePeripheral extends AbstractElectricPeripheral<Creativ
       } else {
          this.setOverwriteInternal(true);
          ((CreativeSourceBlockEntity)this.target).setValue((float)value);
-         ((CreativeSourceBlockEntity)this.target).m_6596_();
+         ((CreativeSourceBlockEntity)this.target).setChanged();
          ((CreativeSourceBlockEntity)this.target).notifyUpdate();
       }
    }

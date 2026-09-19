@@ -1,4 +1,4 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import dan200.computercraft.api.peripheral.IPeripheral;
 import java.util.Objects;
@@ -16,7 +16,7 @@ public abstract class AbstractPowerGridPeripheral<T> implements IPeripheral {
 
    public final boolean equals(IPeripheral other) {
       if (other != null && other.getClass() == this.getClass()) {
-         AbstractPowerGridPeripheral<?> peripheral = (AbstractPowerGridPeripheral)other;
+         AbstractPowerGridPeripheral<?> peripheral = (AbstractPowerGridPeripheral<?>)other;
          return peripheral.target == this.target;
       } else {
          return false;

@@ -1,10 +1,12 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import dan200.computercraft.api.lua.LuaFunction;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.item.Item;
+
 import org.patryk3211.powergrid.electricity.sim.ElectricWire;
 import org.patryk3211.powergrid.electricity.sim.node.TransformerCoupling;
 import org.patryk3211.powergrid.electricity.sim.special.SplitTransformerControllerWire;
@@ -99,10 +101,10 @@ public class TransformerPeripheral extends AbstractElectricPeripheral<Transforme
    }
 
    private Map<String, Object> createCoilData(TransformerCoilParameters coil) {
-      Map<String, Object> data = new HashMap();
+      Map<String, Object> data = new HashMap<>();
       boolean defined = coil != null && coil.isDefined();
       data.put("defined", defined);
-      if (!defined) {
+      if (coil == null || !coil.isDefined()) {
          data.put("turns", 0);
          data.put("terminal1", -1);
          data.put("terminal2", -1);
@@ -112,8 +114,9 @@ public class TransformerPeripheral extends AbstractElectricPeripheral<Transforme
          data.put("turns", coil.getTurns());
          data.put("terminal1", coil.getTerminal1());
          data.put("terminal2", coil.getTerminal2());
-         if (coil.getItem() != null) {
-            data.put("item", BuiltInRegistries.f_257033_.m_7981_(coil.getItem()).toString());
+         var item = coil.getItem();
+         if (item != null) {
+            data.put("item", BuiltInRegistries.ITEM.getKey(item).toString());
          } else {
             data.put("item", "");
          }
@@ -196,7 +199,8 @@ public class TransformerPeripheral extends AbstractElectricPeripheral<Transforme
    )
    public final String getPrimaryItem() {
       TransformerCoilParameters coil = this.getPrimaryCoil();
-      return coil != null && coil.isDefined() && coil.getItem() != null ? BuiltInRegistries.f_257033_.m_7981_(coil.getItem()).toString() : "";
+      Item item = coil != null && coil.isDefined() ? coil.getItem() : null;
+      return coil != null && coil.isDefined() && item != null ? BuiltInRegistries.ITEM.getKey(item).toString() : "";
    }
 
    @LuaFunction(
@@ -204,7 +208,8 @@ public class TransformerPeripheral extends AbstractElectricPeripheral<Transforme
    )
    public final String getSecondaryItem() {
       TransformerCoilParameters coil = this.getSecondaryCoil();
-      return coil != null && coil.isDefined() && coil.getItem() != null ? BuiltInRegistries.f_257033_.m_7981_(coil.getItem()).toString() : "";
+      Item item = coil != null && coil.isDefined() ? coil.getItem() : null;
+      return coil != null && coil.isDefined() && item != null ? BuiltInRegistries.ITEM.getKey(item).toString() : "";
    }
 
    @LuaFunction(

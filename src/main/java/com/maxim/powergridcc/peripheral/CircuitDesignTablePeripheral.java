@@ -1,4 +1,4 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import dan200.computercraft.api.lua.LuaFunction;
 import java.util.ArrayList;
@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import org.patryk3211.powergrid.circuits.components.Component;
@@ -46,15 +47,16 @@ public class CircuitDesignTablePeripheral extends AbstractPowerGridPeripheral<Ci
       return var10000;
    }
 
+   @SuppressWarnings("null")
    private Map<String, Object> createItemData(ItemStack stack, int slot) {
-      Map<String, Object> data = new HashMap();
+      Map<String, Object> data = new HashMap<>();
       data.put("slot", slot);
-      if (stack != null && !stack.m_41619_()) {
+      if (stack != null && !stack.isEmpty()) {
          data.put("empty", false);
-         data.put("item", BuiltInRegistries.f_257033_.m_7981_(stack.m_41720_()).toString());
-         data.put("count", stack.m_41613_());
-         data.put("name", stack.m_41786_().getString());
-         data.put("hasNbt", stack.m_41782_());
+         data.put("item", BuiltInRegistries.ITEM.getKey(stack.getItem()).toString());
+         data.put("count", stack.getCount());
+         data.put("name", stack.getHoverName().getString());
+         data.put("hasNbt", stack.has(DataComponents.CUSTOM_DATA));
          return data;
       } else {
          data.put("empty", true);
@@ -79,7 +81,7 @@ public class CircuitDesignTablePeripheral extends AbstractPowerGridPeripheral<Ci
    )
    public final void setSchematicName(String name) {
       ((CircuitDesignTableBlockEntity)this.target).setSchematicName(name == null ? "" : name);
-      ((CircuitDesignTableBlockEntity)this.target).m_6596_();
+      ((CircuitDesignTableBlockEntity)this.target).setChanged();
    }
 
    @LuaFunction(
@@ -127,7 +129,7 @@ public class CircuitDesignTablePeripheral extends AbstractPowerGridPeripheral<Ci
       mainThread = true
    )
    public final List<Map<String, Object>> getComponents() {
-      List<Map<String, Object>> result = new ArrayList();
+      List<Map<String, Object>> result = new ArrayList<>();
       CircuitSchematic schematic = this.getSchematicInternal();
       if (schematic == null) {
          return result;
@@ -136,7 +138,7 @@ public class CircuitDesignTablePeripheral extends AbstractPowerGridPeripheral<Ci
 
          for(int i = 0; i < components.size(); ++i) {
             PlacedComponent placed = (PlacedComponent)components.get(i);
-            Map<String, Object> data = new HashMap();
+            Map<String, Object> data = new HashMap<>();
             data.put("index", i + 1);
             data.put("x", placed.x);
             data.put("y", placed.y);
@@ -161,7 +163,7 @@ public class CircuitDesignTablePeripheral extends AbstractPowerGridPeripheral<Ci
       mainThread = true
    )
    public final int getInventorySize() {
-      return ((CircuitDesignTableBlockEntity)this.target).getInventory().m_6643_();
+      return ((CircuitDesignTableBlockEntity)this.target).getInventory().getContainerSize();
    }
 
    @LuaFunction(
@@ -170,18 +172,18 @@ public class CircuitDesignTablePeripheral extends AbstractPowerGridPeripheral<Ci
    public final Map<String, Object> getItem(int slot) {
       Container inventory = ((CircuitDesignTableBlockEntity)this.target).getInventory();
       int javaSlot = slot - 1;
-      return javaSlot >= 0 && javaSlot < inventory.m_6643_() ? this.createItemData(inventory.m_8020_(javaSlot), slot) : Map.of();
+      return javaSlot >= 0 && javaSlot < inventory.getContainerSize() ? this.createItemData(inventory.getItem(javaSlot), slot) : Map.of();
    }
 
    @LuaFunction(
       mainThread = true
    )
    public final List<Map<String, Object>> getInventory() {
-      List<Map<String, Object>> result = new ArrayList();
+      List<Map<String, Object>> result = new ArrayList<>();
       Container inventory = ((CircuitDesignTableBlockEntity)this.target).getInventory();
 
-      for(int i = 0; i < inventory.m_6643_(); ++i) {
-         result.add(this.createItemData(inventory.m_8020_(i), i + 1));
+      for(int i = 0; i < inventory.getContainerSize(); ++i) {
+         result.add(this.createItemData(inventory.getItem(i), i + 1));
       }
 
       return result;
@@ -191,7 +193,7 @@ public class CircuitDesignTablePeripheral extends AbstractPowerGridPeripheral<Ci
       mainThread = true
    )
    public final Map<String, Object> getData() {
-      Map<String, Object> data = new HashMap();
+      Map<String, Object> data = new HashMap<>();
       data.put("type", this.getType());
       data.put("schematicName", this.getSchematicName());
       data.put("hasSchematic", this.hasSchematic());

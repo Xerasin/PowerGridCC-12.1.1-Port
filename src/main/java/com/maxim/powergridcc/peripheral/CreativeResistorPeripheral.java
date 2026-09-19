@@ -1,4 +1,4 @@
-package me.maxim.powergridcc.peripheral;
+package com.maxim.powergridcc.peripheral;
 
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.lua.LuaFunction;
@@ -36,7 +36,7 @@ public class CreativeResistorPeripheral extends ResistorPeripheral {
       behaviour.setValue(value);
       ElectricWire wire = this.getCreativeWire();
       wire.setResistance((double)behaviour.getResistance());
-      this.resistor.m_6596_();
+      this.resistor.setChanged();
       this.resistor.notifyUpdate();
    }
 

@@ -1,24 +1,23 @@
-package me.maxim.powergridcc.control;
+package com.maxim.powergridcc.control;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import net.createmod.catnip.animation.LerpedFloat;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.TickEvent.Phase;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+
 import org.patryk3211.powergrid.electricity.electricswitch.HvSwitchBlockEntity;
 import org.patryk3211.powergrid.electricity.sim.SwitchedWire;
 
 @EventBusSubscriber(
-   modid = "powergridcc",
-   bus = Bus.FORGE
+   modid = "powergridcc"
 )
 public final class HvSwitchControlManager {
-   private static final Map<HvSwitchBlockEntity, Boolean> CONTROLLED = new ConcurrentHashMap();
+   private static final Map<HvSwitchBlockEntity, Boolean> CONTROLLED = new ConcurrentHashMap<HvSwitchBlockEntity, Boolean>();
    private static Field rodField;
    private static Field wireField;
 
@@ -49,12 +48,13 @@ public final class HvSwitchControlManager {
    }
 
    @SubscribeEvent
-   public static void onServerTick(TickEvent.ServerTickEvent event) {
-      if (event.phase == Phase.END) {
+   public static void onServerTick(ServerTickEvent.Post event) {
+      {
          CONTROLLED.entrySet().removeIf((entry) -> {
             HvSwitchBlockEntity hvSwitch = (HvSwitchBlockEntity)entry.getKey();
-            if (hvSwitch != null && !hvSwitch.m_58901_()) {
-               if (hvSwitch.m_58904_() != null && !hvSwitch.m_58904_().f_46443_) {
+            if (hvSwitch != null && !hvSwitch.isRemoved()) {
+               Level level = hvSwitch.getLevel();
+               if (level != null && !level.isClientSide) {
                   applyState(hvSwitch, (Boolean)entry.getValue());
                   return false;
                } else {
@@ -83,7 +83,7 @@ public final class HvSwitchControlManager {
             }
 
             hvSwitch.notifyUpdate();
-            hvSwitch.m_6596_();
+            hvSwitch.setChanged();
          }
       } catch (ReflectiveOperationException e) {
          throw new IllegalStateException("Failed to control HV switch", e);
