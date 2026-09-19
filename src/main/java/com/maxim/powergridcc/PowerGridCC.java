@@ -5,21 +5,19 @@ import com.maxim.powergridcc.peripheral.PowerGridPeripheralProvider;
 import java.util.Objects;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 
 @Mod("powergridcc")
-@EventBusSubscriber(modid = PowerGridCC.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class PowerGridCC {
    public static final String MOD_ID = "powergridcc";
 
-   public PowerGridCC() {
+   public PowerGridCC(IEventBus modEventBus) {
+      modEventBus.addListener(PowerGridCC::registerCapabilities);
       System.out.println("PowerGridCC loaded!");
    }
 
-   @SubscribeEvent
    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
       PowerGridPeripheralProvider provider = new PowerGridPeripheralProvider();
       Block[] powerGridBlocks = BuiltInRegistries.BLOCK.entrySet().stream()

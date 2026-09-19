@@ -105,8 +105,11 @@ dependencies {
     // For all intends and purposes: You can treat this dependency as if it is a normal library you would use.
     implementation "net.neoforged:neoforge:${neo_version}"
 
-    implementation("com.simibubi.create:create-${minecraft_version}:${create_version}") {
-        exclude group: 'com.tterrag.registrate', module: 'Registrate'
+    implementation("com.simibubi.create:create-${minecraft_version}:${create_maven_version}") {
+        transitive = false
+    }
+    compileOnly("net.createmod.ponder:ponder-neoforge:1.0.82+mc${minecraft_version}") {
+        transitive = false
     }
     implementation "cc.tweaked:cc-tweaked-${minecraft_version}-forge:${cc_tweaked_version}"
     compileOnly files("libs/powergrid-mc${minecraft_version}-${powergrid_version}.jar")
