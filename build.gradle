@@ -26,7 +26,8 @@ sourceSets.main.resources {
 }
 
 repositories {
-    // Add here additional repositories if required by some of the dependencies below.
+    maven { url = 'https://maven.createmod.net' }
+    maven { url = 'https://maven.squiddev.cc' }
 }
 
 base {
@@ -104,6 +105,11 @@ dependencies {
     // For all intends and purposes: You can treat this dependency as if it is a normal library you would use.
     implementation "net.neoforged:neoforge:${neo_version}"
 
+    implementation("com.simibubi.create:create-${minecraft_version}:${create_version}") {
+        exclude group: 'com.tterrag.registrate', module: 'Registrate'
+    }
+    implementation "cc.tweaked:cc-tweaked-${minecraft_version}-forge:${cc_tweaked_version}"
+
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
     // compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"
@@ -142,6 +148,8 @@ tasks.withType(ProcessResources).configureEach {
             mod_name               : mod_name,
             mod_license            : mod_license,
             mod_version            : mod_version,
+                create_version         : create_version,
+                cc_tweaked_version     : cc_tweaked_version,
     ]
     inputs.properties replaceProperties
 
