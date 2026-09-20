@@ -42,7 +42,7 @@ public class ResistorPeripheral extends AbstractElectricPeripheral<ResistorBlock
       mainThread = true
    )
    public final void setControlValue(int value) throws LuaException {
-      if (value >= 0 && value <= 72) {
+      if (value >= 0 && value <= 45) {
          ResistorValueBehaviour behaviour = this.getValueBehaviour();
          behaviour.value = value;
          ElectricWire wire = this.getWire();
@@ -50,7 +50,7 @@ public class ResistorPeripheral extends AbstractElectricPeripheral<ResistorBlock
          ((ResistorBlockEntity)this.target).setChanged();
          ((ResistorBlockEntity)this.target).notifyUpdate();
       } else {
-         throw new LuaException("Value must be between 0 and 72");
+         throw new LuaException("Value must be between 0 and 45");
       }
    }
 
