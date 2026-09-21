@@ -112,7 +112,7 @@ public class GaugePeripheral extends AbstractPowerGridPeripheral<GaugeBlockEntit
    @LuaFunction(
       mainThread = true
    )
-   public finalj double voltage() {
+   public final double voltage() {
       return this.getVoltage();
    }
 }

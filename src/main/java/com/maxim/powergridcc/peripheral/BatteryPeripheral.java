@@ -5,12 +5,21 @@ import dan200.computercraft.api.peripheral.IPeripheral;
 import java.util.HashMap;
 import java.util.Map;
 import org.patryk3211.powergrid.electricity.battery.BatteryBlockEntity;
+import org.patryk3211.powergrid.electricity.battery.MultiBlockBatteryEntity;
 
 public class BatteryPeripheral implements IPeripheral {
    private final BatteryBlockEntity battery;
 
    public BatteryPeripheral(BatteryBlockEntity battery) {
       this.battery = battery;
+   }
+
+   private BatteryBlockEntity getBattery() {
+      if (this.battery instanceof MultiBlockBatteryEntity multiBlockBattery) {
+         return multiBlockBattery.getControllerBE();
+      }
+
+      return this.battery;
    }
 
    public String getType() {
@@ -21,22 +30,23 @@ public class BatteryPeripheral implements IPeripheral {
       mainThread = true
    )
    public final double getEnergy() {
-      return this.battery.getEnergy();
+      return this.getBattery().getEnergy();
    }
 
    @LuaFunction(
       mainThread = true
    )
    public final double getCapacity() {
-      return this.battery.getCapacity();
+      return this.getBattery().getCapacity();
    }
 
    @LuaFunction(
       mainThread = true
    )
    public final double getChargeLevel() {
-      double capacity = this.battery.getCapacity();
-      return capacity <= (double)0.0F ? (double)0.0F : this.battery.getEnergy() / capacity;
+      BatteryBlockEntity battery = this.getBattery();
+      double capacity = battery.getCapacity();
+      return capacity <= (double)0.0F ? (double)0.0F : battery.getEnergy() / capacity;
    }
 
    @LuaFunction(
@@ -50,21 +60,21 @@ public class BatteryPeripheral implements IPeripheral {
       mainThread = true
    )
    public final double getPower() {
-      return (double)this.battery.calculatePower();
+      return (double)this.getBattery().calculatePower();
    }
 
    @LuaFunction(
       mainThread = true
    )
    public final boolean isCharging() {
-      return this.battery.calculatePower() < 0.0F;
+      return this.getBattery().calculatePower() < 0.0F;
    }
 
    @LuaFunction(
       mainThread = true
    )
    public final boolean isDischarging() {
-      return this.battery.calculatePower() > 0.0F;
+      return this.getBattery().calculatePower() > 0.0F;
    }
 
    @LuaFunction(
@@ -72,10 +82,11 @@ public class BatteryPeripheral implements IPeripheral {
    )
    public final Map<String, Object> getData() {
       Map<String, Object> data = new HashMap<>();
-      double energy = this.battery.getEnergy();
-      double capacity = this.battery.getCapacity();
+      BatteryBlockEntity battery = this.getBattery();
+      double energy = battery.getEnergy();
+      double capacity = battery.getCapacity();
       double level = capacity > (double)0.0F ? energy / capacity : (double)0.0F;
-      double power = (double)this.battery.calculatePower();
+      double power = (double)battery.calculatePower();
       data.put("energy", energy);
       data.put("capacity", capacity);
       data.put("chargeLevel", level);
