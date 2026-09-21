@@ -22,10 +22,6 @@ public class GaugePeripheral extends AbstractPowerGridPeripheral<GaugeBlockEntit
       }
    }
 
-   public Set<String> getAdditionalTypes() {
-      return Set.of("powergrid_gauge");
-   }
-
    @LuaFunction(
       mainThread = true
    )
@@ -98,5 +94,25 @@ public class GaugePeripheral extends AbstractPowerGridPeripheral<GaugeBlockEntit
       } else {
          return (double)((GaugeBlockEntity)this.target).getValue();
       }
+   }
+
+   /** Compatability */
+   
+   public Set<String> getAdditionalTypes() {
+      if (this.target instanceof VoltageGaugeBlockEntity) {
+         return Set.of("powergrid_voltage_gauge", "powergrid_gauge");
+      } else if (this.target instanceof CurrentGaugeBlockEntity) {
+         return Set.of("powergrid_current_gauge", "powergrid_gauge");
+      } else {
+         return this.target instanceof PowerGaugeBlockEntity ? 
+            Set.of("powergrid_power_gauge", "powergrid_gauge") : Set.of("powergrid_gauge");
+      }
+   }
+
+   @LuaFunction(
+      mainThread = true
+   )
+   public finalj double voltage() {
+      return this.getVoltage();
    }
 }
